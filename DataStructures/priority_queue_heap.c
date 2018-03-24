@@ -24,21 +24,63 @@ struct MinHeap * create_minheap(unsigned int capacity) {
 
 void insert_node(struct MinHeap ** min_heap, int v) {
 	(*min_heap)->heaps[++(*min_heap)->size] = v;
-	printf("inserting %d at index %d\n",(*min_heap)->heaps[(*min_heap)->size] , (*min_heap)->size);
+// 	printf("inserting = %d at index = %d\n",(*min_heap)->heaps[(*min_heap)->size] , (*min_heap)->size);
 	unsigned int k ;
 	for(k = (*min_heap)->size; k > 1;  k = k/2) {
-		printf("for k = %d, k/2 = %d\n", k , k/2);
-	
-		if((*min_heap)->heaps[k] < (*min_heap)->heaps[k/2]) {
+// 		printf("for k = %d, k/2 = %d\n", k , k/2);
+// 		printf("value at arr[k] = %d , and arr[k/2] = %d\n",(*min_heap)->heaps[k], (*min_heap)->heaps[k/2]);	
+		if((*min_heap)->heaps[k] > (*min_heap)->heaps[k/2]) {
 			int temp = (*min_heap)->heaps[k];
 			(*min_heap)->heaps[k] = (*min_heap)->heaps[k/2];
 			(*min_heap)->heaps[k/2] = temp;
 		}
-		break;
+		else
+			break;
 	}
+// 	for (unsigned int i = 1 ; i <= (*min_heap)->size ; i++) 
+// 		printf("%d => ",(*min_heap)->heaps[i]);
+// 	printf("\n");
+
 }
 //	(*min_heap)->size ++;
 
+//void swap(int &a , int &b) {
+//	int temp  = a;
+//	a = b;
+//	b = temp;
+//}
+
+void heapify( int A[] ,int size, int i) {
+	int l = 2*i;
+	int r = 2*i+1;
+	int greatest = i;
+	
+// 	printf(" size of passed array = %u\n",sizeof(A));
+	if ( l < size && A[l] > A[i]) {
+	   greatest = l;
+	}
+	if ( r < size && A[r] > A[greatest] ) {
+		greatest = r;
+	}
+	if ( i != greatest ) {
+		int temp = A[i];
+		A[i] = A[greatest];
+		A[greatest] = temp;
+		heapify(A, size, greatest);
+	}
+		//heapify(A , 	
+}
+	 
+void remove_top(struct MinHeap ** min_heap) {
+	unsigned int top = (*min_heap)->heaps[1];
+	(*min_heap)->heaps[1] = (*min_heap)->heaps[(*min_heap)->size];
+	heapify( (*min_heap)->heaps ,(*min_heap)->size, 1);
+	--(*min_heap)->size;
+
+}
+int top( struct MinHeap * min_heap) {
+	return min_heap->heaps[1];
+}
 
 void traverse(struct MinHeap * min_heap) {
 	unsigned int i  ;
@@ -47,6 +89,9 @@ void traverse(struct MinHeap * min_heap) {
 	}
 	printf("\n");
 }
+
+
+
 int main(int argc , char ** argv) {
 	int n,i;
 	scanf("%d",&n);
@@ -57,8 +102,16 @@ int main(int argc , char ** argv) {
 	
 	for ( i = 1; i <= n; i++) {
 		insert_node(&mh, A[i]);
-		traverse(mh);
+// 		traverse(mh);
 	}
 	traverse(mh);
+	for( i = 1; i <= n; i++) {
+// 		remove_top(&mh);
+		printf("top element is = %d\n", top(mh));
+		remove_top(&mh);
+		traverse(mh);
+	}
+// 	remove_top(&mh);
+// 	traverse(mh);
 	return 0;
 }	
